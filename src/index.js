@@ -13,8 +13,11 @@ function query (pattern, name, getToken) {
       : next(effect)
 
   function decorate (state, url) {
+    const token = getToken(state)
+    if (!token) return url
+
     const [base, qs = ''] = url.split('?')
-    const param = [name, getToken(state)].map(encodeURIComponent).join('=')
+    const param = [name, token].map(encodeURIComponent).join('=')
 
     return [
       base,
@@ -31,6 +34,8 @@ function bearer (pattern, getToken) {
 
   function decorate (state, headers = {}) {
     const token = getToken(state)
+    if (!token) return headers
+
     return {
       ...headers,
       Authorization: 'Bearer ' + token

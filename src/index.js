@@ -9,7 +9,7 @@
 function query (pattern, name, getToken) {
   return ({getState}) => next => action =>
     action.type === 'FETCH' && pattern.test(action.payload.url)
-      ? next({...action, url: decorate(getState(), action.payload.url)})
+      ? next({...action, payload: {url: decorate(getState(), action.payload.url)}})
       : next(action)
 
   function decorate (state, url) {
@@ -29,7 +29,7 @@ function query (pattern, name, getToken) {
 function bearer (pattern, getToken) {
   return ({getState}) => next => action =>
     action.type === 'FETCH' && pattern.test(action.payload.url)
-      ? next({...action, params: {...action.payload.params, headers: decorate(getState(), (action.payload.params || {}).headers)}})
+      ? next({...action, payload: {params: {...action.payload.params, headers: decorate(getState(), (action.payload.params || {}).headers)}}})
       : next(action)
 
   function decorate (state, headers = {}) {

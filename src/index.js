@@ -1,6 +1,8 @@
 /**
- * Imports
+ * Types
  */
+
+const FETCH = 'EFFECT_FETCH'
 
 /**
  * Credential middleware
@@ -8,7 +10,7 @@
 
 function query (pattern, name, getToken) {
   return ({getState}) => next => action =>
-    action.type === 'FETCH' && pattern.test(action.payload.url)
+    action.type === FETCH && pattern.test(action.payload.url)
       ? next({...action, payload: {...action.payload, url: decorate(getState(), action.payload.url)}})
       : next(action)
 
@@ -28,7 +30,7 @@ function query (pattern, name, getToken) {
 
 function bearer (pattern, getToken) {
   return ({getState}) => next => action =>
-    action.type === 'FETCH' && pattern.test(action.payload.url)
+    action.type === FETCH && pattern.test(action.payload.url)
       ? next({...action, payload: {...action.payload, params: {...action.payload.params, headers: decorate(getState(), (action.payload.params || {}).headers)}}})
       : next(action)
 

@@ -16,19 +16,21 @@ Add the credential middleware of your choice to the effects stack before the fet
 ### Query string
 
 ```javascript
+import effects from 'redux-effects'
 import {query} from 'redux-effects-credentials'
 import fetch from 'redux-effects-fetch'
 
-effects(query(/https?\:\/\/myapiserver\.com.*/, 'access_token', state => state.accessToken), fetch)
+applyMiddleware(query(/https?\:\/\/myapiserver\.com.*/, 'access_token', state => state.accessToken), fetch)(createStore)
 ```
 
 ### Bearer
 
 ```javascript
+import effects from 'redux-effects'
 import {bearer} from 'redux-effects-credentials'
 import fetch from 'redux-effects-fetch'
 
-effects(bearer(/https?\:\/\/myapiserver.com\.com.*/, state => state.accessToken), fetch)
+applyMiddleware(effects, bearer(/https?\:\/\/myapiserver.com\.com.*/, state => state.accessToken), fetch))(createStore)
 ```
 
 ## License

@@ -49,7 +49,7 @@ function bearer (pattern, getToken) {
  * Exports
  */
 
-export default {
+export {
   query,
   bearer
 }

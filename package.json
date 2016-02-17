@@ -9,7 +9,9 @@
     "prepublish": "rm -rf lib && babel src --out-dir lib",
     "postpublish": "rm -rf lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "redux-effects-fetch": "^0.4.5"
+  },
   "devDependencies": {
     "babel-preset-stage-2": "^6.3.13",
     "babel-preset-es2015": "^6.3.13",

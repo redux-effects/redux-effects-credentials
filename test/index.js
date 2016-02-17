@@ -3,6 +3,7 @@
  */
 
 import test from 'tape'
+import {fetch} from 'redux-effects-fetch'
 import {bearer, query} from '../src'
 
 /**
@@ -16,8 +17,8 @@ test('query', ({equal, plan}) => {
   })
 
   plan(2)
-  mw(get('http://test/'))
-  mw(get('http://test/?'))
+  mw(fetch('http://test/'))
+  mw(fetch('http://test/?'))
 })
 
 test('bearer', ({equal, plan}) => {
@@ -27,18 +28,5 @@ test('bearer', ({equal, plan}) => {
   })
 
   plan(1)
-  mw(get('http://test/'))
+  mw(fetch('http://test/'))
 })
-
-/**
- * Helpers
- */
-
-function get (url) {
-  return {
-    type: 'EFFECT_FETCH',
-    payload: {
-      url
-    }
-  }
-}

@@ -1,8 +1,8 @@
 /**
- * Types
+ * Imports
  */
 
-const FETCH = 'EFFECT_FETCH'
+import {FETCH} from 'redux-effects-fetch'
 
 /**
  * Credential middleware

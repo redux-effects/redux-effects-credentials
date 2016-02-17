@@ -33,6 +33,10 @@ import fetch from 'redux-effects-fetch'
 applyMiddleware(effects, bearer(/https?\:\/\/myapiserver.com\.com.*/, state => state.accessToken), fetch))(createStore)
 ```
 
+### Pattern
+
+Pattern may be a regular expression or a function that returns true/false.
+
 ## License
 
 The MIT License

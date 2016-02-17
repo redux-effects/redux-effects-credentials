@@ -9,8 +9,10 @@ const FETCH = 'EFFECT_FETCH'
  */
 
 function query (pattern, name, getToken) {
+  const isMatch = matcher(pattern)
+
   return ({getState}) => next => action =>
-    action.type === FETCH && pattern.test(action.payload.url)
+    action.type === FETCH && isMatch(action.payload.url)
       ? next({...action, payload: {...action.payload, url: decorate(getState(), action.payload.url)}})
       : next(action)
 
@@ -29,8 +31,10 @@ function query (pattern, name, getToken) {
 }
 
 function bearer (pattern, getToken, prefix = 'Bearer') {
+  const isMatch = matcher(pattern)
+
   return ({getState}) => next => action =>
-    action.type === FETCH && pattern.test(action.payload.url)
+    action.type === FETCH && isMatch(action.payload.url)
       ? next({...action, payload: {...action.payload, params: {...action.payload.params, headers: decorate(getState(), (action.payload.params || {}).headers)}}})
       : next(action)
 
@@ -43,6 +47,12 @@ function bearer (pattern, getToken, prefix = 'Bearer') {
       Authorization: prefix + ' ' + token
     }
   }
+}
+
+function matcher (pattern) {
+  return typeof pattern === 'function'
+    ? pattern
+    : url => pattern.test(url)
 }
 
 /**

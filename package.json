@@ -2,7 +2,7 @@
   "name": "redux-effects-credentials",
   "description": "Add credentials to fetch requests when conditions are met",
   "repository": "git://github.com/redux-effects/redux-effects-credentials.git",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {

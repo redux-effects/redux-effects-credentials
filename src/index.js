@@ -9,17 +9,12 @@ import {FETCH} from 'redux-effects-fetch'
  */
 
 function query (pattern, name, getToken) {
-  const isMatch = matcher(pattern)
+  return abstractMw(pattern, getToken, (payload, token) => ({
+    ...payload,
+    url: decorate(payload.url, token)
+  }))
 
-  return ({getState}) => next => action =>
-    action.type === FETCH && isMatch(action.payload.url)
-      ? next({...action, payload: {...action.payload, url: decorate(getState(), action.payload.url)}})
-      : next(action)
-
-  function decorate (state, url) {
-    const token = getToken(state)
-    if (!token) return url
-
+  function decorate (url, token) {
     const [base, qs = ''] = url.split('?')
     const param = [name, token].map(encodeURIComponent).join('=')
 
@@ -31,22 +26,23 @@ function query (pattern, name, getToken) {
 }
 
 function bearer (pattern, getToken, prefix = 'Bearer') {
-  const isMatch = matcher(pattern)
-
-  return ({getState}) => next => action =>
-    action.type === FETCH && isMatch(action.payload.url)
-      ? next({...action, payload: {...action.payload, params: {...action.payload.params, headers: decorate(getState(), (action.payload.params || {}).headers)}}})
-      : next(action)
-
-  function decorate (state, headers = {}) {
-    const token = getToken(state)
-    if (!token) return headers
-
-    return {
-      ...headers,
-      Authorization: prefix + ' ' + token
+  return abstractMw(pattern, getToken, (payload, token) => ({
+    ...payload,
+    params: {
+      ...(payload.params || {}),
+      headers: {
+        ...((payload.params || {}).headers || {}),
+        Authorization: prefix + ' ' + token
+      }
     }
-  }
+  }))
+}
+
+function abstractMw (pattern, getToken, xf) {
+  const isMatch = matcher(pattern)
+  return ctx => next => action => action.type === FETCH && isMatch(action.payload.url)
+    ? next({...action, payload: xf(action.payload, getToken(ctx))})
+    : next(action)
 }
 
 function matcher (pattern) {

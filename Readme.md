@@ -20,7 +20,7 @@ import effects from 'redux-effects'
 import {query} from 'redux-effects-credentials'
 import fetch from 'redux-effects-fetch'
 
-applyMiddleware(query(/https?\:\/\/myapiserver\.com.*/, 'access_token', state => state.accessToken), fetch)(createStore)
+applyMiddleware(query(/https?\:\/\/myapiserver\.com.*/, 'access_token', ({getState}) => getState().accessToken), fetch)(createStore)
 ```
 
 ### Bearer
@@ -30,7 +30,7 @@ import effects from 'redux-effects'
 import {bearer} from 'redux-effects-credentials'
 import fetch from 'redux-effects-fetch'
 
-applyMiddleware(effects, bearer(/https?\:\/\/myapiserver.com\.com.*/, state => state.accessToken), fetch))(createStore)
+applyMiddleware(effects, bearer(/https?\:\/\/myapiserver.com\.com.*/, ({getState}) => getState().accessToken), fetch))(createStore)
 ```
 
 ### Pattern

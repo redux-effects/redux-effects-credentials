@@ -2,16 +2,16 @@
  * Imports
  */
 
-import test from 'tape'
 import {fetch} from 'redux-effects-fetch'
 import {bearer, query} from '../src'
+import test from 'tape'
 
 /**
  * Tests
  */
 
 test('query', ({equal, plan}) => {
-  const qs = query(/.*/, 'access_token', state => state.token)({getState: () => ({token: 'someToken'})})
+  const qs = query(/.*/, 'access_token', ({getState}) => getState().token)({getState: () => ({token: 'someToken'})})
   const mw = qs(effect => {
     equal(effect.payload.url, 'http://test/?access_token=someToken')
   })
@@ -22,7 +22,7 @@ test('query', ({equal, plan}) => {
 })
 
 test('bearer', ({equal, plan}) => {
-  const b = bearer(/.*/, state => state.token)({getState: () => ({token: 'someToken'})})
+  const b = bearer(/.*/, ({getState}) => getState().token)({getState: () => ({token: 'someToken'})})
   const mw = b(effect => {
     equal(effect.payload.params.headers.Authorization, 'Bearer someToken')
   })

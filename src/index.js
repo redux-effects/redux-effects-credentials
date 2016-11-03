@@ -15,6 +15,8 @@ function query (pattern, name, getToken) {
   }))
 
   function decorate (url, token) {
+    if (!token) return url
+
     const [base, qs = ''] = url.split('?')
     const param = [name, token].map(encodeURIComponent).join('=')
 
@@ -26,7 +28,7 @@ function query (pattern, name, getToken) {
 }
 
 function bearer (pattern, getToken, prefix = 'Bearer') {
-  return abstractMw(pattern, getToken, (payload, token) => ({
+  return abstractMw(pattern, getToken, (payload, token) => !token ? payload : ({
     ...payload,
     params: {
       ...(payload.params || {}),
